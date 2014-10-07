@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo - Console App", "Demo - Console App\Demo - Console App.vcxproj", "{2FBF86A6-94C4-4708-862A-F9E05D11DDCE}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Demo - Liquid Crystal Display", "Demo - Liquid Crystal Display\Demo - Liquid Crystal Display.vcxproj", "{7C160796-D2D7-4BC8-9D68-57E1B4DCD8D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{2FBF86A6-94C4-4708-862A-F9E05D11DDCE}.Debug|Win32.Build.0 = Debug|Win32
 		{2FBF86A6-94C4-4708-862A-F9E05D11DDCE}.Release|Win32.ActiveCfg = Release|Win32
 		{2FBF86A6-94C4-4708-862A-F9E05D11DDCE}.Release|Win32.Build.0 = Release|Win32
+		{7C160796-D2D7-4BC8-9D68-57E1B4DCD8D1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{7C160796-D2D7-4BC8-9D68-57E1B4DCD8D1}.Debug|Win32.Build.0 = Debug|Win32
+		{7C160796-D2D7-4BC8-9D68-57E1B4DCD8D1}.Release|Win32.ActiveCfg = Release|Win32
+		{7C160796-D2D7-4BC8-9D68-57E1B4DCD8D1}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
