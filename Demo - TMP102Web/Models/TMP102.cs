@@ -9,9 +9,9 @@ namespace Demo___TMP102Web.Models
     {
         public TMP102()
         {
-            Values = new List<int>();
+            Readings = new List<Temperature>();
         }
-
-        public List<int> Values { get; set; }
+        
+        public List<Temperature> Readings { get; set; }
     }
 }
