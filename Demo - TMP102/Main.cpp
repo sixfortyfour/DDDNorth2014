@@ -9,13 +9,15 @@
 #include <string>
 #include "WinHttpClient.h"
 
-#define TMP102_I2C_ADDRESS 72			// This is the I2C address for TMP102 chip
+#define TMP102_I2C_ADDRESS 0x48		// This is the I2C address for TMP102 chip
+
+const uint8_t TMP102_START = 0x0;
 
 // Helper function for logging to debug output and the console
 void CustomLogging(char* str)
 {
-	OutputDebugStringA(str); // for VS Output
-	printf(str); // for commandline output
+	OutputDebugStringA(str);		// For VS Output
+	printf(str);					// For commandline output
 }
 
 int _tmain(int argc, _TCHAR* argv[])
@@ -32,37 +34,50 @@ void setup()
 // the loop routine runs over and over again forever:
 void loop()
 {
-	byte firstbyte, secondbyte;			// Bytes read from the TMP102 temperature registers
+	ULONG firstbyte, secondbyte;			// Bytes read from the TMP102 temperature registers
 	int val;							// Two bytes stored together
 	float convertedtemp;				// Multiply our two bytes by scaling factor, mentioned in the datasheet
 	float correctedtemp;
 
 	// Say hello
 	Wire.beginTransmission(TMP102_I2C_ADDRESS);
-	Wire.write("0x00");
-	Wire.endTransmission();
+	Wire.write(TMP102_START);
+	Wire.endTransmission(false);
 
-	Wire.requestFrom(TMP102_I2C_ADDRESS, 2);
-	Wire.endTransmission();
+	delay(100);
 
-	firstbyte = (Wire.read());
-	secondbyte = (Wire.read());
+	if (Wire.requestFrom(TMP102_I2C_ADDRESS, 2) != 1)
+	{
+		firstbyte = (Wire.read());
+		secondbyte = (Wire.read());
 
-	val = ((firstbyte) << 4);			// MSB into first 4 bits
-	val |= (secondbyte >> 4);			// LSB ORed into second 4 bits
+		val = ((firstbyte) << 4);			// MSB into first 4 bits
+		val |= (secondbyte >> 4);			// LSB ORed into second 4 bits
 
-	convertedtemp = val*0.0625;
-	correctedtemp = convertedtemp - 5;
+		convertedtemp = val*0.0625f;
+		correctedtemp = convertedtemp - 5;
 
-	wstring url = L"http://tmp102webhost:55673/Home/Push/"; // Change to correct host
-	wstring val2send = std::to_wstring(correctedtemp);
-	url.append(val2send);
+		char buffer[12];
+		sprintf_s(buffer, sizeof(buffer), "%f\n", correctedtemp);
+		CustomLogging(buffer);
 
-	WinHttpClient client(url);
-	bool success = client.SendHttpRequest(L"POST");
+		try
+		{
+			wstring url = L"http://iain-pc.home:55673/Home/Push/"; // Change to correct host
+			wstring val2send = std::to_wstring((int)correctedtemp);
+			url.append(val2send);
 
-	if (!success)
-		CustomLogging("Cannot post value");
+			WinHttpClient client(url);
+			bool success = client.SendHttpRequest(L"POST");
 
-	delay(5000);
+			if (!success)
+				CustomLogging("Cannot post value");
+		}
+		catch (const std::exception ex)
+		{
+			CustomLogging("Failed to reach temperature logger\n");
+		}
+	}
+
+	delay(1000);
 }
