@@ -38,7 +38,7 @@
                 var d = new Date();
                 $('#monitor').load('/Home/Push');
                 $('#chart').children('img').attr('src', '/Home/GetChartImage/' + d.getTime());
-            }, 1000); // every 1 sec
+            }, 10000); // every 10 sec
     });
     </script>
 </body>
