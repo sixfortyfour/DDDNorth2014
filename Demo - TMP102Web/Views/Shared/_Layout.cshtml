@@ -6,8 +6,7 @@
     <title>@ViewBag.Title - TMP102 Web</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-    @Scripts.Render("~/bundles/jqueryui")
-    <script type="text/javascript" src="~/Scripts/thermometer.js"></script>
+    @Scripts.Render("~/bundles/jquery")
 </head>
 <body>
     <div class="navbar navbar-inverse navbar-fixed-top">
@@ -33,15 +32,14 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @RenderSection("scripts", required: false)
-    <script>
-        $(document).ready(function () {
-            setInterval(function () { cache_clear() }, 5000);
-        });
-
-        function cache_clear() {
-            window.location.reload(true);
-        }
+    <script type="text/javascript">
+        $(function () {
+            setInterval(function () {
+                var d = new Date();
+                $('#monitor').load('/Home/Push');
+                $('#chart').children('img').attr('src', '/Home/GetChartImage/' + d.getTime());
+            }, 1000); // every 1 sec
+    });
     </script>
-
 </body>
 </html>

@@ -6,6 +6,7 @@ using System.Web.Mvc;
 
 using Demo___TMP102Web.Models;
 using System.Web.Helpers;
+using System.Web.UI;
 
 namespace Demo___TMP102Web.Controllers
 {
@@ -19,12 +20,13 @@ namespace Demo___TMP102Web.Controllers
             return View(tmp102);
         }
 
+        [OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 1)]
         public ActionResult Push(int? id) 
         {
             if (id.HasValue)
                 tmp102.Readings.Add(new Temperature() { Id = ++index, Reading = id.Value });
 
-            return View(tmp102);
+            return PartialView(tmp102);
         }
 
         public ActionResult GetChartImage()

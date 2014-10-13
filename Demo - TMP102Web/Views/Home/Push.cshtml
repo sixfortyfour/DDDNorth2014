@@ -1,15 +1,11 @@
-﻿
-@{
-    ViewBag.Title = "Push";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+﻿@using System.Linq
+@model Demo___TMP102Web.Models.TMP102
+
+@if (Model.Readings.Count() > 0)
+{ 
+    <h2>Current TMP102 Reading: @Model.Readings.LastOrDefault().Reading</h2>
 }
-
-<div class="row">
-    <div class="col-md-4">
-        <h2>TMP102 Reading:</h2>
-        <div>
-            <img src="@Url.Action("GetChartImage")" />
-        </div>
-    </div>
-</div>
-
+else
+{
+    <h2>No TMP102 Readings Available</h2>
+}

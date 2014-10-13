@@ -3,10 +3,12 @@
 }
 
 <div class="row">
-    <div class="col-md-4">
-        <h2>TMP102 Reading:</h2>
-        <div>
-            <img src="@Url.Action("GetChartImage")" />
+    <div>
+        <div id="monitor">
+            @Html.Partial("Push")
+        </div>
+        <div id="chart">
+            <img src='@Url.Action("GetChartImage")' />
         </div>
     </div>
 </div>
