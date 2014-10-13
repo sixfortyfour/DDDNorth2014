@@ -31,7 +31,7 @@ namespace Demo___TMP102Web.Controllers
 
         public ActionResult GetChartImage()
         {
-            var key = new Chart(width: 300, height: 300)
+            var key = new Chart(width: 600, height: 400)
             .AddTitle("Temperature Chart")
             .AddSeries(
             chartType: "Line",
