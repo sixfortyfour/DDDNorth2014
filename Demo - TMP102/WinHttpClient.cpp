@@ -229,8 +229,8 @@ bool WinHttpClient::SendHttpRequest(const wstring &httpVerb)
                                         }
                                         while (dwSize > 0);
 
-                                        // The smallest web page must contain more than 300 characters.
-                                        if (resource.size() > 300)
+                                        // The smallest web page must contain more than 20 characters.
+                                        if (resource.size() > 20)
                                         {
                                             bGetReponseSucceed = true;
                                             m_HttpResponse = resource;

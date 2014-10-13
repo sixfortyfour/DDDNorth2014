@@ -44,8 +44,6 @@ void loop()
 	Wire.write(TMP102_START);
 	Wire.endTransmission(false);
 
-	delay(100);
-
 	if (Wire.requestFrom(TMP102_I2C_ADDRESS, 2) != 1)
 	{
 		firstbyte = (Wire.read());
@@ -71,7 +69,7 @@ void loop()
 			bool success = client.SendHttpRequest(L"POST");
 
 			if (!success)
-				CustomLogging("Cannot post value");
+				CustomLogging("Cannot post value\n");
 		}
 		catch (const std::exception ex)
 		{
@@ -79,5 +77,5 @@ void loop()
 		}
 	}
 
-	delay(1000);
+	delay(5000);
 }
