@@ -63,7 +63,7 @@ void loop()
 
 		try
 		{
-			wstring url = L"http://iain-pc.home:55673/Home/Push/"; // Change to correct host
+			wstring url = L"http://tmp102.azurewebsites.net/Home/Push/"; // Change to correct host
 			wstring val2send = std::to_wstring((int)correctedtemp);
 			url.append(val2send);
 
