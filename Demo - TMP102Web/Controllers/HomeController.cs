@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-
-using Demo___TMP102Web.Models;
 using System.Web.Helpers;
 using System.Web.UI;
+
+using Demo___TMP102Web.Models;
 
 namespace Demo___TMP102Web.Controllers
 {
@@ -20,26 +20,30 @@ namespace Demo___TMP102Web.Controllers
             return View(tmp102);
         }
 
-        [OutputCache(NoStore = true, Location = OutputCacheLocation.Client, Duration = 1)]
-        public ActionResult Push(int? id) 
+        public ActionResult Push(double? reading) 
         {
-            if (id.HasValue)
-                tmp102.Readings.Add(new Temperature() { Id = ++index, Reading = id.Value });
+            if (reading.HasValue)
+                tmp102.Readings.Add(new Temperature() { Id = ++index, Reading = reading.Value });
 
             return PartialView(tmp102);
         }
 
         public ActionResult GetChartImage()
         {
-            var key = new Chart(width: 600, height: 400)
-            .AddTitle("Temperature Chart")
-            .AddSeries(
-            chartType: "Line",
-            name: "Readings",
-            xValue: tmp102.Readings.Select(x => x.Id).ToArray(),
-            yValues: tmp102.Readings.Select(x => x.Reading).ToArray());
+            if (tmp102.Readings.Count > 0)
+            {
+                var key = new Chart(width: 600, height: 400)
+                                .AddSeries(chartType: "Line", name: "Readings")
+                                .DataBindTable(dataSource: tmp102.Readings, xField: "Id")
+                                .SetXAxis("Count")
+                                .SetYAxis("Temperature", 15.0, 30.0);
 
-            return File(key.ToWebImage().GetBytes(), "image/jpeg");
+                return File(key.ToWebImage().GetBytes(), "image/jpeg");
+            }
+            else
+            {
+                return File("~/Content/blank.jpg", "image/jpeg");
+            }
         }
     }
 }

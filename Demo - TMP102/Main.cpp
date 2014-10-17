@@ -61,8 +61,8 @@ void loop()
 
 		try
 		{
-			wstring url = L"http://tmp102.azurewebsites.net/Home/Push/"; // Change to correct host
-			wstring val2send = std::to_wstring((int)correctedtemp);
+			wstring url = L"http://tmp102.azurewebsites.net/Home/Push?reading="; // Change to correct host
+			wstring val2send = std::to_wstring(correctedtemp);
 			url.append(val2send);
 
 			WinHttpClient client(url);

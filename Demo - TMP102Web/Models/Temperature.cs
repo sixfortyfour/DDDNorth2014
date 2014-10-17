@@ -8,6 +8,6 @@ namespace Demo___TMP102Web.Models
     public class Temperature
     {
         public int Id { get; set; }
-        public int Reading { get; set; }
+        public double Reading { get; set; }
     }
 }
