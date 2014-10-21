@@ -8,27 +8,50 @@
 #include <strsafe.h>
 #include <Windows.h>
 
+void WriteToFile(HANDLE hFile, char* str);
+
 int _tmain(int argc, _TCHAR* argv[])
 {
+	HANDLE hFile;
+	char buffer[200];
+	DWORD dwBytesWritten = 0;
+	BOOL bErrorFlag = FALSE;
+
+	hFile = CreateFile(L"GalileoTime.txt", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		_tprintf(L"Cannot create file GalileoTime.txt");
+	}
+
 	SYSTEMTIME st;
 	GetLocalTime(&st);
 
-	printf("Local time:\n");
-	printf("Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
-			st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+	_snprintf_s(buffer, sizeof(buffer), "Local time:\n");
+	WriteToFile(hFile, buffer);
+
+	_snprintf_s(buffer, sizeof(buffer), "Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
+											st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+
+	WriteToFile(hFile, buffer);
 
 	GetSystemTime(&st);
+	
+	_snprintf_s(buffer, sizeof(buffer), "\nSystem time:\n");
 
-	printf("\nSystem time:\n");
-	printf("Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
-		st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+	WriteToFile(hFile, buffer);
+
+	_snprintf_s(buffer, sizeof(buffer), "Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
+				st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
+
+	WriteToFile(hFile, buffer);
 
 	TIME_ZONE_INFORMATION tzi;
 
-	printf("\nOld Timezone:\n");
+	_tprintf(L"\nOld Timezone:\n");
 	GetTimeZoneInformation(&tzi);
 
-	wprintf(L"Standard name:%s\nDaylight name:%s\n", tzi.StandardName, tzi.DaylightName);
+	_tprintf(L"Standard name:%s\nDaylight name:%s\n", tzi.StandardName, tzi.DaylightName);
 
 	// Enable the required privilege otherwise error 1314 (a required privilege is not held by the client) is returned
 	HANDLE hToken;
@@ -55,6 +78,22 @@ int _tmain(int argc, _TCHAR* argv[])
 	printf("\nNew Timezone:\n");
 	wprintf(L"Standard name:%s\nDaylight name:%s\n", tzi.StandardName, tzi.DaylightName);
 
+	CloseHandle(hFile);
+
 	return 0;
 }
+
+void WriteToFile(HANDLE hFile, char* str)
+{
+	BOOL bErrorFlag = FALSE;
+	DWORD dwBytesWritten = 0;
+
+	bErrorFlag = WriteFile(hFile, str, strlen(str), &dwBytesWritten, NULL);
+
+	if (FALSE == bErrorFlag)
+	{
+		_tprintf(L"Failed to write file GalileoTime.txt - %d", GetLastError());
+	}
+}
+
 
