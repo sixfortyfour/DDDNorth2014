@@ -17,20 +17,25 @@ int _tmain(int argc, _TCHAR* argv[])
 	DWORD dwBytesWritten = 0;
 	BOOL bErrorFlag = FALSE;
 
-	hFile = CreateFile(L"GalileoTime.txt", GENERIC_WRITE, 0, NULL, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
+	hFile = CreateFile(L"GalileoTime.txt", GENERIC_WRITE, 0, NULL, OPEN_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
 
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
 		_tprintf(L"Cannot create file GalileoTime.txt");
+		return 1;
+	}
+	else
+	{
+		SetFilePointer(hFile, 0, NULL, FILE_END);
 	}
 
 	SYSTEMTIME st;
 	GetLocalTime(&st);
 
-	_snprintf_s(buffer, sizeof(buffer), "Local time:\n");
+	_snprintf_s(buffer, sizeof(buffer), "\nLocal time:\n");
 	WriteToFile(hFile, buffer);
 
-	_snprintf_s(buffer, sizeof(buffer), "Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
+	_snprintf_s(buffer, sizeof(buffer), "Year:%d,Month:%d,Date:%d,Hour:%d,Min:%d,Second:% d\n",
 											st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
 	WriteToFile(hFile, buffer);
@@ -41,17 +46,20 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	WriteToFile(hFile, buffer);
 
-	_snprintf_s(buffer, sizeof(buffer), "Year:%d\nMonth:%d\nDate:%d\nHour:%d\nMin:%d\nSecond:% d\n",
+	_snprintf_s(buffer, sizeof(buffer), "Year:%d,Month:%d,Date:%d,Hour:%d,Min:%d,Second:% d\n",
 				st.wYear, st.wMonth, st.wDay, st.wHour, st.wMinute, st.wSecond);
 
 	WriteToFile(hFile, buffer);
 
 	TIME_ZONE_INFORMATION tzi;
 
-	_tprintf(L"\nOld Timezone:\n");
+	_snprintf_s(buffer, sizeof(buffer), "\nOld Timezone:\n");
+	WriteToFile(hFile, buffer);
+
 	GetTimeZoneInformation(&tzi);
 
-	_tprintf(L"Standard name:%s\nDaylight name:%s\n", tzi.StandardName, tzi.DaylightName);
+	_snprintf_s(buffer, sizeof(buffer), "Standard name:%s,Daylight name:%s\n", tzi.StandardName, tzi.DaylightName);
+	WriteToFile(hFile, buffer);
 
 	// Enable the required privilege otherwise error 1314 (a required privilege is not held by the client) is returned
 	HANDLE hToken;
@@ -75,8 +83,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	GetTimeZoneInformation(&tzi);
 
-	printf("\nNew Timezone:\n");
-	wprintf(L"Standard name:%s\nDaylight name:%s\n", tzi.StandardName, tzi.DaylightName);
+	_snprintf_s(buffer, sizeof(buffer), "\nNew Timezone:\n");
+	WriteToFile(hFile, buffer);
+
+	_snprintf_s(buffer, sizeof(buffer), "Standard name:%s,Daylight name:%s\n", tzi.StandardName, tzi.DaylightName);
+	WriteToFile(hFile, buffer);
 
 	CloseHandle(hFile);
 
